@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Scanner;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -81,7 +82,7 @@ public class AbreExcel {
                 nome = produto.getNome();
             }
         }
-        System.out.printf("\nO maior preço de um produto é:\n%s - U$ %.2f", nome, maiorPreco);
+        System.out.printf("\nO maior preço de um produto é:\n%s - U$ %.2f\n", nome, maiorPreco);
     }
 
     public static void menorPreco(){
@@ -96,7 +97,7 @@ public class AbreExcel {
                 nome = produto.getNome();
             }
         }
-        System.out.printf("\nO menor preço de um produto é:\n%s - U$ %.2f", nome, menorPreco);
+        System.out.printf("\nO menor preço de um produto é:\n%s - U$ %.2f\n", nome, menorPreco);
     }
 
     public static void mediaPrecos(){
@@ -105,13 +106,32 @@ public class AbreExcel {
             soma = soma + produto.getPreco();
         }
         media = soma / listaProdutos.size();
-        System.out.printf("\nA média de preço dos produtos é: U$ %.2f", media);
+        System.out.printf("\nA média de preço dos produtos é: U$ %.2f\n", media);
     }
 
     public static void main(String[] args) {
         lerExcel();
-        maiorPreco();
-        menorPreco();
-        mediaPrecos();
+
+        while (true) {
+            try {
+                Scanner entrada = new Scanner(System.in);
+                System.out.println("\n-----CHAT XLSX PRODUTOS-----\n1 - Lista de produtos\n2 - Maior preço entre os produtos\n3 - Menor preço entre os produtos\n4 - Média de Preços\n5 - Sair\n");
+                int opcao = entrada.nextInt();
+                switch (opcao) {
+                    case 1 -> mostrarProdutos();
+                    case 2 -> maiorPreco();
+                    case 3 -> menorPreco();
+                    case 4 -> mediaPrecos();
+                    case 5 -> System.out.println("Finalizando Chat");
+                    default -> System.out.println("Opção não existente");
+                }
+                if (opcao == 5) {
+                    entrada.close();
+                    break;
+                }
+            } catch (Exception e) {
+                System.out.println("Erro " + e);
+            }
+        }
     }
 }
