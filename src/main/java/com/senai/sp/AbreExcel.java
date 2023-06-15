@@ -21,11 +21,9 @@ public class AbreExcel {
     static List<Produto> listaProdutos = new ArrayList<>();
 
     // Função que lê o excel,pelo caminho de seu arquivo.
-    public static void lerExcel(){
+    public static void lerExcel(String arquivoExcel){
         try {
-            Scanner entrada = new Scanner(System.in);
-            System.out.println("Digite o caminho completo do seu arquivo, com o nome já inserido: ");
-            AbreExcel.fileName = entrada.nextLine();
+            AbreExcel.fileName = arquivoExcel.replace("\\", "\\\\");
             FileInputStream arquivo = new FileInputStream(new File(AbreExcel.fileName));
 
             // pega a planilha de produtos.
@@ -63,7 +61,6 @@ public class AbreExcel {
                         }
                     }
                 }
-                entrada.close();
                 arquivo.close();
             }
             // Tratamento de erros
@@ -79,11 +76,15 @@ public class AbreExcel {
     public static void mostrarProdutos(){
         Iterator<Produto> itr = listaProdutos.iterator();
 
+        System.out.println(" -----------------------------------");
+        System.out.printf(" |  %-20s | %-7s |\n", "Nome", "Preço");
+        System.out.println(" |-----------------------|---------|");
         while(itr.hasNext())
         {
             Produto produto = itr.next();
-            System.out.printf("%s - U$ %.2f\n", produto.getNome(), produto.getPreco());
+            System.out.printf(" |  %-20s | U$ %.2f |\n", produto.getNome(), produto.getPreco());
         }
+        System.out.println(" -----------------------------------");
     }
 
     // Função que mostra o produto que custa mais caro
@@ -130,13 +131,16 @@ public class AbreExcel {
 
     // Função Main
     public static void main(String[] args) {
+        Scanner entrada = new Scanner(System.in);
+        System.out.println("Digite o caminho completo do seu arquivo, com o nome já inserido: ");
+        String excel = entrada.nextLine();
+
         // Primero ele chama a função que lê o excel
-        lerExcel();
+        lerExcel(excel);
 
         // Menu para seleção de qual função o usuário deseja ver
         while (true) {
             try {
-                Scanner entrada = new Scanner(System.in);
                 System.out.println("\n-----CHAT XLSX PRODUTOS-----\n1 - Lista de produtos\n2 - Maior preço entre os produtos\n3 - Menor preço entre os produtos\n4 - Média de Preços\n5 - Sair\n");
                 int opcao = entrada.nextInt();
                 switch (opcao) {
@@ -152,6 +156,7 @@ public class AbreExcel {
                     break;
                 }
             } catch (Exception e) {
+                entrada.nextLine();
                 System.out.println("Erro " + e);
             }
         }
