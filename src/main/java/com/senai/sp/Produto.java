@@ -1,5 +1,6 @@
 package com.senai.sp;
 
+// Classe dos produtos da loja, com nome e preço.
 public class Produto {
     private String nome;
     private double preco;
